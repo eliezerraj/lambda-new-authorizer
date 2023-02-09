@@ -11,12 +11,9 @@ phases:
   build:
     commands:
       - echo BUILD started on `date`
-      - echo BUILD Zipping deployment package...
-      - zip -r -q ./lambda-new-authorizer.zip .
+      - echo BUILD Running tests...
+      - npm test
   post_build:
       commands:
-      - echo POST_BUILD Updating lambda Function...
+      - echo POST_BUILD Tests Complete...
       - echo BUILD completed on `date`  
-artifacts:
-  files:
-    - lambda-new-authorizer.zip
