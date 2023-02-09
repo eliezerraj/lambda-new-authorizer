@@ -1,6 +1,7 @@
 // npm install jsonwebtoken
 // npm install npm install @aws-crypto/client-node
 // zip -r ../lambda-new-authorizer .
+
 import {
     KmsKeyringNode,
     buildClient,
