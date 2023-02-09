@@ -12,7 +12,7 @@ phases:
     commands:
       - echo BUILD started on `date`
       - echo BUILD Zipping deployment package...
-      #- zip -r -q ./lambda-new-authorizer.zip .
+      - zip -r -q ./lambda-new-authorizer.zip .
   post_build:
       commands:
       - echo POST_BUILD Updating lambda Function...
