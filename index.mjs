@@ -36,7 +36,7 @@ const generatePolicy = ({ allow }) => {
 };
 
 export const handler = async(event) => {
-    console.log('*** Loading lambda new authorization Version 1.1');
+    console.log('*** Loading lambda new authorization Version 2.0');
     
     var tokenID =( event.headers && (event.headers['Authorization'] || event.headers['authorization'])) || event.authorizationToken;
     if(!tokenID){
