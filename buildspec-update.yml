@@ -1,17 +1,24 @@
 version: 0.2
 
+env:
+  variables:
+    FUNCTION_NAME: lambda-new-authorizer
+    BUCKET_NAME: account-a-884069944685-codedeploy-artfacts
+
 phases:
   install:
     runtime-versions:
       nodejs: 16
+
   pre_build:
     commands:
-      - echo PRE_BUILD no tasks...
+      - echo PRE_BUILD no tasks... 
+
   build:
     commands:
-      - echo PRE_BUILD no tasks...
+      - echo POST_BUILD Updating lambda Function...
+      - aws lambda update-function-code --function-name ${FUNCTION_NAME} --s3-bucket ${BUCKET_NAME} --s3-key ${FUNCTION_NAME}/${FUNCTION_NAME}.zip
+  
   post_build:
       commands:
-      - echo POST_BUILD Updating lambda Function...
-      - aws lambda update-function-code \--function-name  lambda-new-authorizer \--s3-bucket account-a-884069944685-codedeploy-artfacts --s3-key lambda-new-authorizer.zip
-      - echo POST_BUILD completed on `date`  
+      - echo POST_BUILD no tasks... 
