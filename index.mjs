@@ -11,7 +11,8 @@ import {
 import jwt from 'jsonwebtoken';
 
 const jwtKey = "my_secret_key";
-var decrypt_token;
+
+const ENV_JWE = process.env.JWE
 const { decrypt } = buildClient(
   CommitmentPolicy.REQUIRE_ENCRYPT_REQUIRE_DECRYPT
 )
@@ -36,8 +37,13 @@ const generatePolicy = ({ allow }) => {
 };
 
 export const handler = async(event) => {
-    console.log('*** Loading lambda new authorization Version 2.0');
-    
+    console.log('*** Loading lambda new authorization Version 2.1');
+
+    console.log('-------------------------------------------------');
+    console.log(event);
+    console.log('-------------------------------------------------');
+    console.log('ENV_JWE: ', ENV_JWE);
+
     var tokenID =( event.headers && (event.headers['Authorization'] || event.headers['authorization'])) || event.authorizationToken;
     if(!tokenID){
         console.log('==> Token not found !!!');
@@ -53,15 +59,21 @@ export const handler = async(event) => {
         return generatePolicy({ allow: false });
     }
   
-    if (event.headers['jwe'] == true){
+    if (ENV_JWE === "true"){
+      console.log('------ DECRYPT TOKEN ---------');
+      try {
         const encryptedBuffer = Buffer.from(tokenID, 'base64');
         const { plaintext } = await decrypt(keyring, encryptedBuffer);
-
+  
         console.log('==> plaintext.toString : ', plaintext.toString('utf8'));
         tokenID = plaintext.toString('utf8');
     
-        console.log('----------------------');
         console.log('==> tokenID_final : ', tokenID);
+      } catch (error) {
+        console.log('==> Erro  DECRYPT TOKEN: ', error);
+        return generatePolicy({ allow: false });
+      }
+      console.log('------ END DECRYPT TOKEN ---------');
     }
 
     try {
